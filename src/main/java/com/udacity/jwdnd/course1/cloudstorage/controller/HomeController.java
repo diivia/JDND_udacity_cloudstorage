@@ -9,10 +9,7 @@ import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/home")
@@ -45,12 +42,21 @@ public class HomeController {
     }
 
     @PostMapping("/credential")
-    public String addNote(Authentication authentication, @ModelAttribute("credential") CredentialForm credentialForm, Model model) {
+    public String addCredential(Authentication authentication, @ModelAttribute("credentialForm") CredentialForm credentialForm, Model model) {
         credentialService.addCredential(credentialForm);
         model.addAttribute("credentials", credentialService.getAllCredentials());
         credentialForm.setUrl("");
         credentialForm.setUserName("");
         credentialForm.setUserId("");
+        return "result";
+    }
+
+    @GetMapping("/credentials/{credentialId}")
+    public String deleteCredential(Authentication authentication, @ModelAttribute("credentialForm") CredentialForm credentialForm, Model model) {
+        System.out.println("Inside /credentials/{credentialId}");
+        int test = credentialService.deleteCredential(credentialForm);
+        if (test < 0) throw new IllegalArgumentException("Error occured");
+        model.addAttribute("credentials", credentialService.getAllCredentials());
         return "result";
     }
 }

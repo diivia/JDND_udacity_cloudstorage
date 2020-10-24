@@ -26,10 +26,15 @@ public class CredentialService {
     public void addCredential(CredentialForm credentialForm){
         Credential credential = new Credential();
 
-        credentialForm.setUrl(credentialForm.getUserId());
+        credential.setUrl(credentialForm.getUrl());
         credential.setUserName(credentialForm.getUserName());
         credential.setPassword(credentialForm.getPassword());
         credentialMapper.insert(credential);
+
+    }
+
+    public int deleteCredential(CredentialForm credentialForm){
+        return credentialMapper.delete(credentialForm.getCredentialId());
 
     }
 
