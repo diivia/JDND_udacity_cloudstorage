@@ -31,7 +31,7 @@ public class HomeController {
         return "home";
     }
 
-    @PostMapping("/note")
+    @PostMapping("/notes")
     public String addNote(Authentication authentication, @ModelAttribute("noteForm") NoteForm noteForm, Model model) {
 //        chatForm.setUserName(authentication.getName());
         noteService.addNote(noteForm);
@@ -41,7 +41,7 @@ public class HomeController {
         return "result";
     }
 
-    @PostMapping("/credential")
+    @PostMapping("/credentials")
     public String addCredential(Authentication authentication, @ModelAttribute("credentialForm") CredentialForm credentialForm, Model model) {
         credentialService.addCredential(credentialForm);
         model.addAttribute("credentials", credentialService.getAllCredentials());

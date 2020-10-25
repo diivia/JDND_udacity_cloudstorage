@@ -23,22 +23,36 @@ public class CredentialService {
         System.out.println("Create CredentialService");
     }
 
-    public void addCredential(CredentialForm credentialForm){
+    public void addCredential(CredentialForm credentialForm) {
         Credential credential = new Credential();
 
-        credential.setUrl(credentialForm.getUrl());
-        credential.setUserName(credentialForm.getUserName());
-        credential.setPassword(credentialForm.getPassword());
-        credentialMapper.insert(credential);
+        if (credentialMapper.getCredentialById(credentialForm.getCredentialId()) != null) {
+            credential = credentialMapper.getCredentialById(credentialForm.getCredentialId());
+            credential.setUrl(credentialForm.getUrl());
+            credential.setUserName(credentialForm.getUserName());
+            credential.setPassword(credentialForm.getPassword());
+            credentialMapper.update(credential.getCredentialId(),
+                    credential.getUrl(),
+                    credential.getUserName(),
+                    credential.getPassword(),
+                    credential.getUserId());
+
+        } else {
+            credential.setUrl(credentialForm.getUrl());
+            credential.setUserName(credentialForm.getUserName());
+            credential.setPassword(credentialForm.getPassword());
+            credentialMapper.insert(credential);
+        }
+
 
     }
 
-    public int deleteCredential(CredentialForm credentialForm){
+    public int deleteCredential(CredentialForm credentialForm) {
         return credentialMapper.delete(credentialForm.getCredentialId());
 
     }
 
-    public List<Credential> getAllCredentials(){
+    public List<Credential> getAllCredentials() {
         return credentialMapper.getAllCredentials();
     }
 
