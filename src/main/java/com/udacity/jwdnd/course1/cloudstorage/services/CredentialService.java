@@ -23,27 +23,32 @@ public class CredentialService {
         System.out.println("Create CredentialService");
     }
 
-    public void addCredential(CredentialForm credentialForm) {
-        Credential credential = new Credential();
-
+    public void insertCredential(CredentialForm credentialForm) {
         if (credentialMapper.getCredentialById(credentialForm.getCredentialId()) != null) {
-            credential = credentialMapper.getCredentialById(credentialForm.getCredentialId());
-            credential.setUrl(credentialForm.getUrl());
-            credential.setUserName(credentialForm.getUserName());
-            credential.setPassword(credentialForm.getPassword());
-            credentialMapper.update(credential.getCredentialId(),
-                    credential.getUrl(),
-                    credential.getUserName(),
-                    credential.getPassword(),
-                    credential.getUserId());
-
+            updateCredential(credentialForm);
         } else {
-            credential.setUrl(credentialForm.getUrl());
-            credential.setUserName(credentialForm.getUserName());
-            credential.setPassword(credentialForm.getPassword());
-            credentialMapper.insert(credential);
+            addCredential(credentialForm);
         }
+    }
 
+    private void addCredential(CredentialForm credentialForm) {
+        Credential credential = new Credential();
+        credential.setUrl(credentialForm.getUrl());
+        credential.setUserName(credentialForm.getUserName());
+        credential.setPassword(credentialForm.getPassword());
+        credentialMapper.insert(credential);
+    }
+
+    private void updateCredential(CredentialForm credentialForm) {
+        Credential credential = credentialMapper.getCredentialById(credentialForm.getCredentialId());
+        credential.setUrl(credentialForm.getUrl());
+        credential.setUserName(credentialForm.getUserName());
+        credential.setPassword(credentialForm.getPassword());
+        credentialMapper.update(credential.getCredentialId(),
+                credential.getUrl(),
+                credential.getUserName(),
+                credential.getPassword(),
+                credential.getUserId());
 
     }
 

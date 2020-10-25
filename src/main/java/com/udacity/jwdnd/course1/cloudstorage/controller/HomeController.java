@@ -28,26 +28,34 @@ public class HomeController {
     public String getHomePage(@ModelAttribute("noteForm") NoteForm noteForm, @ModelAttribute("credentialForm") CredentialForm credentialForm, Model model) {
         model.addAttribute("notes", this.noteService.getAllNotes());
         model.addAttribute("credentials", this.credentialService.getAllCredentials());
+
         return "home";
     }
 
     @PostMapping("/notes")
     public String addNote(Authentication authentication, @ModelAttribute("noteForm") NoteForm noteForm, Model model) {
 //        chatForm.setUserName(authentication.getName());
-        noteService.addNote(noteForm);
+        noteService.insertNote(noteForm);
         model.addAttribute("notes", noteService.getAllNotes());
-        noteForm.setNoteTitle("");
-        noteForm.setNoteDescription("");
+
+        return "result";
+    }
+
+    @GetMapping("/notes/{noteId}")
+    public String deleteNote(Authentication authentication, @ModelAttribute("noteForm") NoteForm noteForm, Model model) {
+        System.out.println("Inside /notes/{noteId}");
+        int test = noteService.deleteNote(noteForm);
+        if (test < 0) throw new IllegalArgumentException("Error occured");
+        model.addAttribute("notes", noteService.getAllNotes());
+
         return "result";
     }
 
     @PostMapping("/credentials")
     public String addCredential(Authentication authentication, @ModelAttribute("credentialForm") CredentialForm credentialForm, Model model) {
-        credentialService.addCredential(credentialForm);
+        credentialService.insertCredential(credentialForm);
         model.addAttribute("credentials", credentialService.getAllCredentials());
-        credentialForm.setUrl("");
-        credentialForm.setUserName("");
-        credentialForm.setUserId("");
+
         return "result";
     }
 
@@ -57,6 +65,7 @@ public class HomeController {
         int test = credentialService.deleteCredential(credentialForm);
         if (test < 0) throw new IllegalArgumentException("Error occured");
         model.addAttribute("credentials", credentialService.getAllCredentials());
+
         return "result";
     }
 }

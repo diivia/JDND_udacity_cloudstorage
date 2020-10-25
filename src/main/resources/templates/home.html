@@ -69,7 +69,7 @@
                     + Add a New Note
                 </button>
 
-                <div class="table-responsive">
+                <div class="table-responsive" th:object="${notes}">
                     <table class="table table-striped" id="userTable">
                         <thead>
                         <tr>
@@ -81,8 +81,15 @@
                         <tbody>
                         <tr id="note-list" th:each="note : ${notes}">
                             <td>
-                                <button type="button" class="btn btn-success">Edit</button>
-                                <a class="btn btn-danger">Delete</a>
+                                <button type="button" class="btn btn-success"
+                                        th:data-noteid="${note.noteId}"
+                                        th:data-notetitle="${note.noteTitle}"
+                                        th:data-notedescription="${note.noteDescription}"
+                                        th:data-userid="${note.userId}"
+                                        onclick="showNoteModal(this.getAttribute('data-noteid'),
+                                        this.getAttribute('data-notetitle'),
+                                        this.getAttribute('data-notedescription'))">Edit</button>
+                                <a class="btn btn-danger" th:href="@{/home/notes/{noteId}(noteId=${note.noteId})}">Delete</a>
                             </td>
                             <th th:text="${note.noteTitle}" scope="row">Example Note Title</th>
                             <td th:text="${note.noteDescription}">Example Note Description</td>

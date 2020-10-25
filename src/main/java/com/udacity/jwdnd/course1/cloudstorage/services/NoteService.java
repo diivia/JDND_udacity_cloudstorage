@@ -19,13 +19,33 @@ public class NoteService {
 
     @PostConstruct
     public void postConstruct() {
-        System.out.println("Create MassageService");
+        System.out.println("Create NoteService");
     }
 
-    public void addNote(NoteForm noteForm){
+    public void insertNote(NoteForm noteForm){
+        if (noteMapper.getNoteById(noteForm.getNoteId()) != null){
+            updateNote(noteForm);
+        } else {
+            addNote(noteForm);
+        }
+    }
+
+    private void updateNote(NoteForm noteForm) {
+        Note note = noteMapper.getNoteById(noteForm.getNoteId());
+        note.setNoteTitle(noteForm.getNoteTitle());
+        note.setNoteDescription(noteForm.getNoteDescription());
+
+        noteMapper.update(note.getNoteId(),
+                note.getNoteTitle(),
+                note.getNoteDescription(),
+                note.getUserId());
+    }
+
+    private void addNote(NoteForm noteForm){
         Note note = new Note();
         note.setNoteTitle(noteForm.getNoteTitle());
         note.setNoteDescription(noteForm.getNoteDescription());
+        note.setUserId(noteForm.getUserId());
 
         noteMapper.insert(note);
 
@@ -33,5 +53,9 @@ public class NoteService {
 
     public List<Note> getAllNotes(){
         return noteMapper.getAllNotes();
+    }
+
+    public int deleteNote(NoteForm noteForm) {
+        return noteMapper.delete(noteForm.getNoteId());
     }
 }
